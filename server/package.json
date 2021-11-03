@@ -1,0 +1,23 @@
+{
+  "name": "kct-fam-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start":"nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ganesh-sethu/kct-fam-app.git"
+  },
+  "author": "ganesh,subash and saran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ganesh-sethu/kct-fam-app/issues"
+  },
+  "homepage": "https://github.com/ganesh-sethu/kct-fam-app#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemailer": "^6.7.0"
+  }
+}
