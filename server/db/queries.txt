@@ -1,0 +1,51 @@
+  createUserTable:
+    "CREATE TABLE users (
+         empId VARCHAR(50), 
+         name VARCHAR(50),
+         email VARCHAR(50),
+         department VARCHAR(50),
+         password VARCHAR(255),
+         designation VARCHAR(50),
+         PRIMARY KEY (empId),
+         FOREIGN KEY (department) REFERENCES departments(department)
+     ); "
+
+
+  createDepartmentsTable:
+    "CREATE TABLE departments (
+        department VARCHAR(50), 
+        allocatedBudget INT,
+        budgetUsed INT,
+        PRIMARY KEY (departmentId)
+    ); "
+
+
+  createEventsTable:
+    "CREATE TABLE events (
+        eventId VARCHAR(50), 
+        requestId VARCHAR(50),
+        eventProof VARCHAR(255),
+        budgetUsed INT,
+        eventStatus TINYINT,
+        PRIMARY KEY (eventId),
+        FOREIGN KEY (requestId) REFERENCES requests(requestId)
+    );"
+
+
+  createRequestsTable:
+    "CREATE TABLE requests (
+        requestId VARCHAR(50), 
+        approvalStatus INT,
+        formData JSON,
+        budget INT,
+        eventStartDate DATETYPE,
+        eventEndDate DATETYPE,
+        rejection_status INT,
+        rejection_reason VARCHAR(1000),
+        request_msg VARCHAR(1000),
+        empId VARCHAR(50), 
+        PRIMARY KEY (requestId),
+        FOREIGN KEY (empId) REFERENCES users(empId)
+    );"
+
+    mysqldump -h localhost -u root --no-data kct_fam > schema.sql
