@@ -1,5 +1,11 @@
-  createUserTable:
-    "CREATE TABLE users (
+  CREATE TABLE departments (
+        department VARCHAR(50), 
+        allocatedBudget INT,
+        budgetUsed INT,
+        PRIMARY KEY (departmentId)
+    );
+
+CREATE TABLE users (
          empId VARCHAR(50), 
          name VARCHAR(50),
          email VARCHAR(50),
@@ -8,44 +14,32 @@
          designation VARCHAR(50),
          PRIMARY KEY (empId),
          FOREIGN KEY (department) REFERENCES departments(department)
-     ); "
+     );
 
-
-  createDepartmentsTable:
-    "CREATE TABLE departments (
-        department VARCHAR(50), 
-        allocatedBudget INT,
-        budgetUsed INT,
-        PRIMARY KEY (departmentId)
-    ); "
-
-
-  createEventsTable:
-    "CREATE TABLE events (
-        eventId VARCHAR(50), 
-        requestId VARCHAR(50),
-        eventProof VARCHAR(255),
-        budgetUsed INT,
-        eventStatus TINYINT,
-        PRIMARY KEY (eventId),
-        FOREIGN KEY (requestId) REFERENCES requests(requestId)
-    );"
-
-
-  createRequestsTable:
-    "CREATE TABLE requests (
-        requestId VARCHAR(50), 
-        approvalStatus INT,
-        formData JSON,
+  CREATE TABLE requests (
+        request_id VARCHAR(50), 
+        approval_status INT,
+        form_data JSON,
         budget INT,
-        eventStartDate DATETYPE,
-        eventEndDate DATETYPE,
+        event_start_date datetime,
+        event_end_date datetime,
         rejection_status INT,
         rejection_reason VARCHAR(1000),
         request_msg VARCHAR(1000),
-        empId VARCHAR(50), 
-        PRIMARY KEY (requestId),
-        FOREIGN KEY (empId) REFERENCES users(empId)
-    );"
+        emp_id VARCHAR(50), 
+        PRIMARY KEY (request_id),
+        FOREIGN KEY (emp_id) REFERENCES users(emp_id) ON DELETE CASCADE
+    );
+
+CREATE TABLE events (
+        event_id VARCHAR(50), 
+        request_id VARCHAR(50),
+        event_proof VARCHAR(255),
+        budget_used INT,
+        event_status TINYINT,
+        PRIMARY KEY (event_id),
+        FOREIGN KEY (request_id) REFERENCES requests(request_id) ON DELETE CASCADE
+    );
+
 
     mysqldump -h localhost -u root --no-data kct_fam > schema.sql
