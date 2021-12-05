@@ -9,6 +9,7 @@ const {
   HR,
   ARCHIVE,
   PRINCIPAL,
+  REJECTED,
 } = require("../common/constants");
 router.post("/", authenticate.auth, (req, res) => {
   let userLevel = findUserVal(req.user);
@@ -73,4 +74,33 @@ router.get("/", authenticate.auth, (req, res) => {
   });
 });
 
+router.put("/reject", authenticate.auth, (req, res) => {
+  const userLevel = findUserVal(req.user);
+  db.query(
+    "UPDATE requests SET approval_status=?,rejected_by=?,rejection_reason=? WHERE approval_status=? AND request_id=?",
+    [
+      -1,
+      req.user.emp_id,
+      req.body.rejectionReason,
+      userLevel,
+      req.body.requestId,
+    ],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send({
+          error,
+        });
+      } else if (result && result.affectedRows) {
+        res.send({
+          msg: "Request declined successfully",
+        });
+      } else {
+        res.status(500).send({
+          result,
+        });
+      }
+    }
+  );
+});
 module.exports = router;
