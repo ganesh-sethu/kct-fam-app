@@ -52,4 +52,25 @@ router.post("/", authenticate.auth, (req, res) => {
   });
 });
 
+router.get("/", authenticate.auth, (req, res) => {
+  const userLevel = findUserVal(req.user);
+  let query = "SELECT * FROM requests where approval_status=?";
+  db.query(query, userLevel, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({
+        error,
+      });
+    } else if (result && result.length) {
+      res.send({
+        requests: [...result],
+      });
+    } else {
+      res.send({
+        msg: "No requests found",
+      });
+    }
+  });
+});
+
 module.exports = router;
