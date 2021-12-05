@@ -5,4 +5,5 @@ module.exports = {
   HR: 3,
   ARCHIVE: 4,
   PRINCIPAL: 5,
+  APPROVED: 6,
 };
