@@ -10,6 +10,7 @@ const {
   ARCHIVE,
   PRINCIPAL,
   REJECTED,
+  APPROVED,
 } = require("../common/constants");
 router.post("/", authenticate.auth, (req, res) => {
   let userLevel = findUserVal(req.user);
@@ -55,8 +56,7 @@ router.post("/", authenticate.auth, (req, res) => {
 
 router.get("/", authenticate.auth, (req, res) => {
   const userLevel = findUserVal(req.user);
-  let query = "SELECT * FROM requests where approval_status=?";
-  db.query(query, userLevel, (error, result) => {
+  const callBack = (error, result) => {
     if (error) {
       console.log(error);
       res.status(500).send({
@@ -71,7 +71,20 @@ router.get("/", authenticate.auth, (req, res) => {
         msg: "No requests found",
       });
     }
-  });
+  };
+  if (userLevel === HOD) {
+    db.query(
+      "SELECT * FROM requests join users on requests.emp_id=users.emp_id where approval_status=? and department=?",
+      [userLevel, req.user.department],
+      callBack
+    );
+  } else {
+    db.query(
+      "SELECT * FROM requests where approval_status=?",
+      userLevel,
+      callBack
+    );
+  }
 });
 
 router.put("/reject", authenticate.auth, (req, res) => {
@@ -95,6 +108,10 @@ router.put("/reject", authenticate.auth, (req, res) => {
         res.send({
           msg: "Request declined successfully",
         });
+      } else if (result && !result.affectedRows && !result.fieldCount) {
+        res.send({
+          msg: "Row not found",
+        });
       } else {
         res.status(500).send({
           result,
@@ -103,4 +120,44 @@ router.put("/reject", authenticate.auth, (req, res) => {
     }
   );
 });
+
+router.put("/approve", authenticate.auth, (req, res) => {
+  const userLevel = findUserVal(req.user);
+  const requestedUserLevel = req.body.user_level;
+  let nextLevel = 0;
+  if (userLevel === BUDGET_COORDINATOR) {
+    if (requestedUserLevel === NORMAL_USER) nextLevel = HOD;
+    else if (requestedUserLevel === HOD) nextLevel = HR;
+    else if (requestedUserLevel === HR) nextLevel = ARCHIVE;
+    else if (requestedUserLevel === ARCHIVE) nextLevel = PRINCIPAL;
+    else if (requestedUserLevel === PRINCIPAL) nextLevel = APPROVED;
+  } else {
+    nextLevel = userLevel + 1;
+  }
+  db.query(
+    "UPDATE requests SET approval_status=? WHERE approval_status=? AND request_id=?",
+    [nextLevel, userLevel, req.body.requestId],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send({
+          error,
+        });
+      } else if (result && result.affectedRows) {
+        res.send({
+          msg: "Request approved by " + req.user.designation,
+        });
+      } else if (result && !result.affectedRows && !result.fieldCount) {
+        res.send({
+          msg: "Row not found",
+        });
+      } else {
+        res.status(500).send({
+          result,
+        });
+      }
+    }
+  );
+});
+
 module.exports = router;
