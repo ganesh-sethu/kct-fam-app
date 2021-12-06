@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const db = require("./db/db");
 const cors = require("cors");
+const sendMail = require("./common/mail");
 require("dotenv").config();
 
 const PORT = process.env.SERVER_PORT;
@@ -19,8 +20,18 @@ app.use(cors(corsOption));
 app.use("/api/admin", require("./routes/adminRoute"));
 app.use("/api", require("./routes/authenticateRoute"));
 app.use("/api/request", require("./routes/requestsRoute"));
-app.get("/", (req, res) => {
-  res.send("welcome to kct fam app");
+app.get("/", async (req, res) => {
+  sendMail(
+    ["chsubash333@gmail.com", "subash.18cs@kct.ac.in"],
+    "test real",
+    "hi hello"
+  )
+    .then(() => {
+      res.send({
+        msg: "welcome",
+      });
+    })
+    .catch((err) => res.send({ err }));
 });
 
 //server listen port
