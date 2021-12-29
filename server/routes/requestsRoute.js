@@ -162,6 +162,8 @@ router.put("/approve", authenticate.auth, (req, res) => {
       "UPDATE requests SET approval_status=?, aad_no=? WHERE approval_status=? AND request_id=?";
     values = [userLevel + 1, req.body.aadNo, userLevel, req.body.requestId];
   } else {
+    query =
+      "UPDATE requests SET approval_status=? WHERE approval_status=? AND request_id=?";
     nextLevel = userLevel + 1;
     values = [nextLevel, userLevel, req.body.requestId];
   }
