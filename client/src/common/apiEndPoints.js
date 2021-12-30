@@ -5,6 +5,7 @@ const prefixBackEndURI = (path) => {
 const apiEndPoints = {
   getUser: prefixBackEndURI("/api/users"),
   loginUser: prefixBackEndURI("/api/login"),
+  getRequests: prefixBackEndURI("/api/request"),
 };
 
 export default apiEndPoints;

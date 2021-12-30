@@ -1,22 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const counterSlice = createSlice({
-  name: 'authentication',
+  name: "authentication",
   initialState: {
-    isAuthenticated: false,
+    user: {},
   },
   reducers: {
-    login: (state) => {
-      state.isAuthenticated  = true
+    login: (state, action) => {
+      state.user = action.payload;
     },
     logout: (state) => {
-      state.isAuthenticated = false
+      state.user = {};
     },
-   
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { login , logout  } = counterSlice.actions
+export const { login, logout } = counterSlice.actions;
 
-export default counterSlice.reducer
+export default counterSlice.reducer;

@@ -94,13 +94,17 @@ router.get("/", authenticate.auth, (req, res) => {
   };
   if (userLevel === HOD) {
     db.query(
-      "SELECT * FROM requests join users on requests.emp_id=users.emp_id where approval_status=? and department=?",
+      "SELECT * FROM requests \
+           join users u1 on requests.emp_id=u1.emp_id \
+           join departments d on d.department=u1.department where approval_status=? and department=?",
       [userLevel, req.user.department],
       callBack
     );
   } else {
     db.query(
-      "SELECT * FROM requests where approval_status=?",
+      "SELECT * FROM requests \
+      join users u1 on requests.emp_id=u1.emp_id \
+      join departments d on d.department=u1.department where approval_status=? ",
       userLevel,
       callBack
     );

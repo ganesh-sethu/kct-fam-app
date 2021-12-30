@@ -2,7 +2,7 @@ import * as React from "react";
 import axios from "axios";
 import apiEndPoints from "../../common/apiEndPoints";
 import { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -10,7 +10,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -20,13 +19,21 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Dashboard from "../Dashboard/Dashboard";
 import { createStyles, makeStyles } from "@mui/styles";
+import PageNotFound from "../404/404";
+import MyEvent from "../MyEvent/MyEvent";
+import Reports from "../Reports/Reports";
+import Requests from "../Requests/Requests";
+import { useDispatch } from "react-redux";
+import { login } from "../../state/slices/authenticationSlice";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import { Badge } from "@mui/material";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     toolbar: {
-      marginTop: "4rem",
+      marginTop: "0rem",
     },
   })
 );
@@ -79,9 +86,30 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const classes = useStyles();
+  const { pathname } = useLocation();
   const [open, setOpen] = React.useState(true);
-  const [title, setTitle] = React.useState("Dashboard");
+  const [active, setActive] = React.useState("dashboard");
+  const [requests, setRequests] = React.useState([]);
+
   let navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const getRequests = (token) => {
+    axios
+      .get(apiEndPoints.getRequests, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        setRequests(res.data.requests);
+        console.log(res.data.requests);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     let token = localStorage.getItem("token");
     if (token) {
@@ -92,7 +120,8 @@ export default function PersistentDrawerLeft() {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          dispatch(login(res.data));
+          getRequests(token);
         })
         .catch((err) => {
           navigate("/logout");
@@ -100,7 +129,9 @@ export default function PersistentDrawerLeft() {
     } else {
       navigate("/login");
     }
-  });
+    setActive(pathname.substring(1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,10 +144,14 @@ export default function PersistentDrawerLeft() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{ backgroundColor: "transparent" }}
+        elevation={0}
+      >
         <Toolbar>
           <IconButton
-            color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
@@ -124,9 +159,6 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {title}
-          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -141,9 +173,15 @@ export default function PersistentDrawerLeft() {
         variant="persistent"
         anchor="left"
         open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: theme.palette.primary.main,
+            color: "#fff",
+          },
+        }}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton sx={{ color: "#fff" }} onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
@@ -154,18 +192,99 @@ export default function PersistentDrawerLeft() {
         <Divider />
         <List>
           <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "dashboard"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
             button
             onClick={() => {
-              setTitle("Dashboard");
+              setActive("dashboard");
+
               navigate("/dashboard");
             }}
           >
             <ListItemText primary="Dashboard" />
           </ListItem>
+
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "events"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
+            button
+            onClick={() => {
+              setActive("events");
+              navigate("/events");
+            }}
+          >
+            <ListItemText primary="My Events" />
+          </ListItem>
+
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "requests"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
+            button
+            onClick={() => {
+              setActive("requests");
+              navigate("/requests");
+            }}
+          >
+            <ListItemText primary="Requests" />
+
+            {requests && requests.length ? (
+              <Badge badgeContent={requests.length} color="error">
+                <NotificationsActiveIcon />
+              </Badge>
+            ) : undefined}
+          </ListItem>
+
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "reports"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
+            button
+            onClick={() => {
+              setActive("reports");
+              navigate("/reports");
+            }}
+          >
+            <ListItemText primary="Reports" />
+          </ListItem>
         </List>
-        <Divider />
+
         <List>
-          <ListItem button onClick={() => navigate("/logout")}>
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+            }}
+            button
+            onClick={() => navigate("/logout")}
+          >
             <ListItemText primary="Logout" />
           </ListItem>
         </List>
@@ -174,6 +293,13 @@ export default function PersistentDrawerLeft() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/events" element={<MyEvent />} />
+          <Route
+            path="/requests"
+            element={<Requests requests={requests} setRequests={setRequests} />}
+          />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Main>
     </Box>
