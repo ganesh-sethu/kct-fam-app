@@ -51,7 +51,7 @@ router.post(
         });
       } else {
         db.query(
-          "INSERT INTO users(empId,name,email,department,designation,password) VALUES(?,?,?,?,?,?)",
+          "INSERT INTO users(emp_id,name,email,department,designation,password) VALUES(?,?,?,?,?,?)",
           [
             req.body.empId,
             req.body.name,
