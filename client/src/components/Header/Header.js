@@ -20,20 +20,21 @@ import ListItemText from "@mui/material/ListItemText";
 import Dashboard from "../Dashboard/Dashboard";
 import { createStyles, makeStyles } from "@mui/styles";
 import PageNotFound from "../404/404";
-import MyEvent from "../MyEvent/MyEvent";
+import Events from "../Events/Events";
 import Reports from "../Reports/Reports";
 import Requests from "../Requests/Requests";
 import { useDispatch } from "react-redux";
 import { login } from "../../state/slices/authenticationSlice";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { Badge } from "@mui/material";
+import { Badge, Typography } from "@mui/material";
+import NewEvent from "../NewEvent/NewEvent";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     toolbar: {
-      marginTop: "0rem",
+      marginTop: "4rem",
     },
   })
 );
@@ -110,6 +111,10 @@ export default function PersistentDrawerLeft() {
       });
   };
 
+  const updateRequests = (id) => {
+    setRequests(requests.filter((item) => item.request_id !== id));
+  };
+
   useEffect(() => {
     let token = localStorage.getItem("token");
     if (token) {
@@ -124,12 +129,21 @@ export default function PersistentDrawerLeft() {
           getRequests(token);
         })
         .catch((err) => {
-          navigate("/logout");
+          if (
+            err.response &&
+            (err.response.code === 401 || err.response.code === 403)
+          )
+            navigate("/logout");
+          else navigate("/404");
         });
     } else {
       navigate("/login");
     }
-    setActive(pathname.substring(1));
+
+    if (pathname.indexOf("/", 1) >= 0)
+      setActive(pathname.substring(1, pathname.indexOf("/", 1)));
+    else setActive(pathname.substring(1));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -147,7 +161,7 @@ export default function PersistentDrawerLeft() {
       <AppBar
         position="fixed"
         open={open}
-        sx={{ backgroundColor: "transparent" }}
+        // sx={{ backgroundColor: "transparent" }}
         elevation={0}
       >
         <Toolbar>
@@ -155,10 +169,13 @@ export default function PersistentDrawerLeft() {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
+            sx={{ mr: 2, color: "#fff", ...(open && { display: "none" }) }}
           >
             <MenuIcon />
           </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {active.charAt(0).toUpperCase() + active.substring(1)}
+          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -227,7 +244,7 @@ export default function PersistentDrawerLeft() {
               navigate("/events");
             }}
           >
-            <ListItemText primary="My Events" />
+            <ListItemText primary="Events" />
           </ListItem>
 
           <ListItem
@@ -293,10 +310,21 @@ export default function PersistentDrawerLeft() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/events" element={<MyEvent />} />
+          <Route path="/events" element={<Events value="upcoming" />} />
+          <Route
+            path="/events/upcoming"
+            element={<Events value="upcoming" />}
+          />
+          <Route
+            path="/events/previous"
+            element={<Events value="previous" />}
+          />
+          <Route path="/events/new" element={<NewEvent />} />
           <Route
             path="/requests"
-            element={<Requests requests={requests} setRequests={setRequests} />}
+            element={
+              <Requests requests={requests} updateRequests={updateRequests} />
+            }
           />
           <Route path="/reports" element={<Reports />} />
           <Route path="/*" element={<PageNotFound />} />

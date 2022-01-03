@@ -1,10 +1,10 @@
 import React from "react";
-import axios from "axios";
-import apiEndPoints from "../../common/apiEndPoints";
-import { useNavigate } from "react-router-dom";
+
 import { Button, Divider, Paper } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
+
+import RejectModal from "../Modal/RejectModal";
+import ApproveModal from "../Modal/ApproveModal";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -32,16 +32,17 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-export default function Requests({ requests, setRequests }) {
-  let navigate = useNavigate();
+export default function Requests({ requests, updateRequests }) {
   const classes = useStyles();
   const [showMore, setShowMore] = React.useState(null);
-  const theme = useTheme();
+  const [approve, setApprove] = React.useState("");
+  const [reject, setReject] = React.useState("");
 
   const handleShowMore = (reqId) => {
     if (showMore === reqId) setShowMore(null);
     else setShowMore(reqId);
   };
+
   return (
     <div>
       <h3>Pending Requests </h3>
@@ -52,7 +53,7 @@ export default function Requests({ requests, setRequests }) {
           <Paper
             className={classes.paper}
             key={item.request_id}
-            sx={{ background: "#eeeeee" }}
+            sx={{ background: "#f5f5f5" }}
           >
             <div className={classes.container2}>
               <div>
@@ -105,13 +106,36 @@ export default function Requests({ requests, setRequests }) {
                 sx={{ marginRight: "1rem" }}
                 variant="contained"
                 color="success"
+                onClick={() => {
+                  setApprove(item.request_id);
+                }}
               >
                 Approve
               </Button>
-              <Button variant="contained" color="error">
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  setReject(item.request_id);
+                }}
+              >
                 Reject
               </Button>
             </div>
+            <ApproveModal
+              open={approve === item.request_id}
+              setOpen={setApprove}
+              request={item}
+              requests={requests}
+              updateRequests={updateRequests}
+            />
+            <RejectModal
+              open={reject === item.request_id}
+              setOpen={setReject}
+              request={item}
+              requests={requests}
+              updateRequests={updateRequests}
+            />
           </Paper>
         ))
       ) : (

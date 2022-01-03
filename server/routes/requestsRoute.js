@@ -93,10 +93,11 @@ router.get("/", authenticate.auth, (req, res) => {
     }
   };
   if (userLevel === HOD) {
+    console.log(userLevel);
     db.query(
       "SELECT * FROM requests \
            join users u1 on requests.emp_id=u1.emp_id \
-           join departments d on d.department=u1.department where approval_status=? and department=?",
+           join departments d on d.department=u1.department where approval_status=? and u1.department=?",
       [userLevel, req.user.department],
       callBack
     );
@@ -148,30 +149,21 @@ router.put("/reject", authenticate.auth, (req, res) => {
 
 router.put("/approve", authenticate.auth, (req, res) => {
   const userLevel = findUserVal(req.user);
-  const requestedUserLevel = req.body.user_level;
+  const requestedUserLevel = req.body.userLevel;
   let nextLevel = 0;
   let values = [];
-  let query = "";
+  let query =
+    "UPDATE requests SET approval_status=? WHERE approval_status=? AND request_id=?";
   if (userLevel === BUDGET_COORDINATOR) {
-    query =
-      "UPDATE requests SET approval_status=?, budget_ref_no=? WHERE approval_status=? AND request_id=?";
     if (requestedUserLevel === NORMAL_USER) nextLevel = HOD;
     else if (requestedUserLevel === HOD) nextLevel = HR;
     else if (requestedUserLevel === HR) nextLevel = ARCHIVE;
     else if (requestedUserLevel === ARCHIVE) nextLevel = PRINCIPAL;
     else if (requestedUserLevel === PRINCIPAL) nextLevel = APPROVED;
-    values = [nextLevel, req.body.budgetRefNo, userLevel, req.body.requestId];
-  } else if (userLevel === ARCHIVE) {
-    query =
-      "UPDATE requests SET approval_status=?, aad_no=? WHERE approval_status=? AND request_id=?";
-    values = [userLevel + 1, req.body.aadNo, userLevel, req.body.requestId];
   } else {
-    query =
-      "UPDATE requests SET approval_status=? WHERE approval_status=? AND request_id=?";
     nextLevel = userLevel + 1;
-    values = [nextLevel, userLevel, req.body.requestId];
   }
-
+  values = [nextLevel, userLevel, req.body.requestId];
   db.query(query, values, (error, result) => {
     if (error) {
       console.log(error);
@@ -180,14 +172,12 @@ router.put("/approve", authenticate.auth, (req, res) => {
       });
     } else if (result && result.affectedRows) {
       res.send({
-        msg: "Request approved by " + req.user.designation,
+        msg: "Request approved",
       });
       approveMail(req.body.requestId, req.user);
-    } else if (result && !result.affectedRows && !result.fieldCount) {
-      res.send({
-        msg: "Row not found",
-      });
     } else {
+      console.log(query);
+      console.log(values);
       res.status(500).send({
         result,
       });
