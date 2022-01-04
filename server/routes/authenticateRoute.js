@@ -31,7 +31,7 @@ router.post("/login", (req, res) => {
                 user.password = undefined;
                 res.send({
                   accessToken: jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: "24h",
+                    // expiresIn: "24h",
                   }),
                 });
               }
