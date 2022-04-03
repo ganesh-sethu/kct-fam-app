@@ -1,46 +1,47 @@
-  CREATE TABLE departments (
-        department VARCHAR(50), 
-        allocated_budget INT,
-        budget_used INT,
-        PRIMARY KEY (departmentId)
-    );
+  CREATE TABLE `departments` (
+  `department` varchar(50) NOT NULL,
+  `allocated_budget` int DEFAULT NULL,
+  `budget_used` int DEFAULT NULL,
+  `department_name` varchar(50) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`department`)
+);
 
-CREATE TABLE users (
-         empId VARCHAR(50), 
-         name VARCHAR(50),
-         email VARCHAR(50),
-         department VARCHAR(50),
-         password VARCHAR(255),
-         designation VARCHAR(50),
-         PRIMARY KEY (empId),
-         FOREIGN KEY (department) REFERENCES departments(department)
-     );
+CREATE TABLE `users` (
+  `emp_id` varchar(50) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `department` varchar(50) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `designation` varchar(50) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`emp_id`),
+  KEY `department` (`department`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`department`) REFERENCES `departments` (`department`)
+);
 
- CREATE TABLE requests (
-        request_id INT NOT NULL auto_increment, 
-        emp_id VARCHAR(50),
-        user_level INT,
-        approval_status INT,
-        event_type varchar(50),
-        event_info JSON,
-        budget_ref_no VARCHAR(50),
-        aad_no VARCHAR(50),
-        event_happened tinyint,
-        rejection_reason VARCHAR(1000),
-        PRIMARY KEY (request_id),
-        FOREIGN KEY (emp_id) REFERENCES users(emp_id) ON DELETE CASCADE
-    );
-    
-
-CREATE TABLE events (
-        event_id VARCHAR(50), 
-        request_id VARCHAR(50),
-        event_proof VARCHAR(255),
-        budget_used INT,
-        event_status TINYINT,
-        PRIMARY KEY (event_id),
-        FOREIGN KEY (request_id) REFERENCES requests(request_id) ON DELETE CASCADE
-    );
+CREATE TABLE `requests` (
+  `request_id` int NOT NULL AUTO_INCREMENT,
+  `emp_id` varchar(50) DEFAULT NULL,
+  `user_level` int DEFAULT NULL,
+  `approval_status` int DEFAULT NULL,
+  `event_type` varchar(50) DEFAULT NULL,
+  `event_info` json DEFAULT NULL,
+  `budget_ref_no` varchar(50) DEFAULT NULL,
+  `aad_no` varchar(50) DEFAULT NULL,
+  `event_happened` tinyint DEFAULT NULL,
+  `rejection_reason` varchar(1000) DEFAULT NULL,
+  `rejected_by` varchar(50) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`request_id`),
+  KEY `emp_id` (`emp_id`),
+  KEY `fk_rejected_by` (`rejected_by`),
+  CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `users` (`emp_id`) ON DELETE CASCADE,
+  CONSTRAINT `requests_ibfk_2` FOREIGN KEY (`rejected_by`) REFERENCES `users` (`emp_id`) ON DELETE CASCADE
+);
 
 
     mysqldump -h localhost -u root --no-data kct_fam > schema.sql
