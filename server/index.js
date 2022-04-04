@@ -20,21 +20,8 @@ app.use(cors(corsOption));
 app.use("/api/admin", require("./routes/adminRoute"));
 app.use("/api", require("./routes/authenticateRoute"));
 app.use("/api/request", require("./routes/requestsRoute"));
+app.use("/api/events", require("./routes/eventsRoute"));
 app.use("/api/users", require("./routes/userRoute"));
-
-app.get("/", async (req, res) => {
-  sendMail(
-    ["chsubash333@gmail.com", "subash.18cs@kct.ac.in"],
-    "test real",
-    "hi hello"
-  )
-    .then(() => {
-      res.send({
-        msg: "welcome",
-      });
-    })
-    .catch((err) => res.send({ err }));
-});
 
 //server listen port
 app.listen(PORT, () => {

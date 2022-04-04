@@ -8,6 +8,8 @@ const apiEndPoints = {
   getRequests: prefixBackEndURI("/api/request"),
   approveRequest: prefixBackEndURI("/api/request/approve"),
   rejectRequest: prefixBackEndURI("/api/request/reject"),
+  postRequest: prefixBackEndURI("/api/request"),
+  getUpComingEvents: prefixBackEndURI("/api/events/"),
 };
 
 export default apiEndPoints;

@@ -23,31 +23,26 @@ const {
 router.post("/", authenticate.auth, (req, res) => {
   let userLevel = findUserVal(req.user);
   let nextUserLevel = 0;
-  let values = [
-    req.user.emp_id,
-    userLevel,
-    req.body.eventType,
-    JSON.stringify(req.body.data),
-  ];
+  let values = [req.user.emp_id, userLevel, JSON.stringify(req.body)];
   let query = "";
   if (userLevel === BUDGET_COORDINATOR) {
     query =
-      "INSERT INTO requests(emp_id,user_level,event_type,event_info,approval_status,budget_ref_no) VALUES(?,?,?,?,?,?)";
+      "INSERT INTO requests(emp_id,user_level,event_info,approval_status,budget_ref_no) VALUES(?,?,?,?,?)";
     values = [...values, HR, req.body.budgetRefNo];
     nextUserLevel = HR;
   } else if (userLevel === ARCHIVE) {
     query =
-      "INSERT INTO requests(emp_id,user_level,event_type,event_info,approval_status,aad_no) VALUES(?,?,?,?,?,?)";
+      "INSERT INTO requests(emp_id,user_level,event_info,approval_status,aad_no) VALUES(?,?,?,?,?)";
     values = [...values, BUDGET_COORDINATOR, req.body.aadNo];
     nextUserLevel = BUDGET_COORDINATOR;
   } else {
     query =
-      "INSERT INTO requests(emp_id,user_level,event_type,event_info,approval_status) VALUES(?,?,?,?,?)";
+      "INSERT INTO requests(emp_id,user_level,event_info,approval_status) VALUES(?,?,?,?)";
     values = [...values, BUDGET_COORDINATOR];
     nextUserLevel = BUDGET_COORDINATOR;
   }
 
-  db.query(query, values, (error, result, fields) => {
+  db.query(query, values, (error, result) => {
     if (error) {
       console.log(error);
       res.status(500).send({
@@ -58,12 +53,10 @@ router.post("/", authenticate.auth, (req, res) => {
         msg: "request sent successfully",
       });
       requestSentMail(req.user, {
-        ...req.body.data,
-        eventType: req.body.eventType,
+        ...req.body,
       });
       notifyMail(req.user, findDesignation(nextUserLevel), {
-        ...req.body.data,
-        eventType: req.body.eventType,
+        ...req.body,
       });
     } else {
       console.log(result);

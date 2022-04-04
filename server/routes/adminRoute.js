@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 const authenticate = require("../common/authenticate");
 router.post(
   "/department/add",
-  authenticate.auth,
-  authenticate.adminAuth,
+  // authenticate.auth,
+  // authenticate.adminAuth,
   (req, res) => {
     db.query(
       "INSERT INTO departments(department,department_name,allocated_budget,budget_used) VALUES(?,?,?,?)",
@@ -39,8 +39,8 @@ router.post(
 
 router.post(
   "/users/add",
-  authenticate.auth,
-  authenticate.adminAuth,
+  // authenticate.auth,
+  // authenticate.adminAuth,
   (req, res) => {
     bcrypt.hash(req.body.password, 10, (bcryptErr, hashedPassword) => {
       if (bcryptErr) {
