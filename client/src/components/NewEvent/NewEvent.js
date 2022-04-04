@@ -1,32 +1,70 @@
 import React from "react";
-import { createStyles, makeStyles } from "@mui/styles";
 import Select from "./Select/Select";
+import { Divider, Paper, Button, Alert } from "@mui/material";
 import TextField from "./TextField/TextField";
-import { Divider, Paper } from "@mui/material";
-import EventOrganized from "./EventOrganized";
-
-const useStyles = makeStyles((theme) => createStyles({}));
+import TextArea from "./TextArea/TextArea";
+import formFields from "../../common/formFields";
+import axios from "axios";
+import apiEndPoints from "../../common/apiEndPoints";
+import { useNavigate } from "react-router-dom";
 
 export default function NewEvent() {
-  const classes = useStyles();
-  const [formData, setFormData] = React.useState({});
-  const [formContent, setFormContent] = React.useState(undefined);
-  const eventTypes = [
-    "Events Organized",
-    "Awards/Recognition achieved",
-    "Outreach-Faculty as resource person",
-    "Events Attended",
-    "Online Certification",
-    "Research",
-  ];
-  React.useEffect(() => {
-    if (formData["Event Type"] === eventTypes[0]) {
-      setFormContent(
-        <EventOrganized formData={formData} setFormData={setFormData} />
-      );
-    } else setFormContent(undefined);
-    // eslint-disable-next-line
-  }, [formData["Event Type"]]);
+  const [formData, setFormData] = React.useState({
+    [formFields.eventType]: "Organize event",
+    [formFields.facultyInCharge]: "",
+    [formFields.title]: "",
+    [formFields.venue]: "",
+    [formFields.purpose]: "",
+    [formFields.from]: "",
+    [formFields.to]: "",
+    [formFields.details]: "",
+    [formFields.budget]: "",
+  });
+  const [alert, setAlert] = React.useState(undefined);
+  const navigate = useNavigate();
+  const eventTypes = ["Organize event", "Attend event"];
+
+  const handleSubmit = () => {
+    console.log(formData);
+    setAlert(undefined);
+    let token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .post(
+          apiEndPoints.postRequest,
+          {
+            ...formData,
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then((res) => {
+          setAlert(
+            <Alert
+              sx={{ marginTop: "1rem" }}
+              variant="filled"
+              severity="success"
+            >
+              Request sent successfully
+            </Alert>
+          );
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          setAlert(
+            <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="error">
+              Error sending request.Try later
+            </Alert>
+          );
+        });
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div>
@@ -36,11 +74,69 @@ export default function NewEvent() {
         <Select
           formData={formData}
           setFormData={setFormData}
-          name="Event Type"
+          name={formFields.eventType}
           menuItems={eventTypes}
+          initialValue="Organize event"
+        />
+        <TextField
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.facultyInCharge}
           initialValue=""
         />
-        {formContent}
+        <TextField
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.title}
+          initialValue=""
+        />
+        <TextField
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.venue}
+          initialValue=""
+        />
+        <TextArea
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.details}
+          initialValue=""
+        />
+        <TextArea
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.purpose}
+          initialValue=""
+        />
+        <TextField
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.budget}
+          initialValue=""
+        />
+        <TextField
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.from}
+          initialValue=""
+        />
+        <TextField
+          formData={formData}
+          setFormData={setFormData}
+          name={formFields.to}
+          initialValue=""
+        />
+        <div>
+          <Button
+            style={{ width: "100%", marginTop: "1rem" }}
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+        </div>
+        {alert}
       </Paper>
     </div>
   );

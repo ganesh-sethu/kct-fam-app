@@ -5,6 +5,7 @@ import { createStyles, makeStyles } from "@mui/styles";
 
 import RejectModal from "../Modal/RejectModal";
 import ApproveModal from "../Modal/ApproveModal";
+import formFields from "../../common/formFields";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -58,7 +59,9 @@ export default function Requests({ requests, updateRequests }) {
             <div className={classes.container2}>
               <div>
                 <h3>
-                  {item.event_info.name ? item.event_info.name : "Event Name"}
+                  {item.event_info[formFields.title]
+                    ? item.event_info[formFields.title]
+                    : "Event Name"}
                 </h3>
                 <p>
                   by {item.name} from {item.department_name}

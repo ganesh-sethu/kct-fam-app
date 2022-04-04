@@ -8,6 +8,7 @@ const {
 } = require("./constants.js");
 const sendMail = require("./mail.js");
 const db = require("../db/db");
+const formFields = require("./formFields.js");
 
 module.exports = {
   findUserVal: (user) => {
@@ -34,16 +35,15 @@ module.exports = {
   },
 
   requestSentMail: (user, eventInfo) => {
-    const html =
-      "<p><b> Event type </b>: " +
-      eventInfo.eventType +
-      "</p>" +
-      "<p><b> Event name </b>: " +
-      eventInfo.eventName +
-      "</p>" +
-      "<p><b> Budget </b>: " +
-      eventInfo.budget +
-      "</p>";
+    let html = "";
+    Object.keys(formFields).map((item) => {
+      html +=
+        "<p><b>" +
+        formFields[item] +
+        "</b> : " +
+        eventInfo[formFields[item]] +
+        "</p>";
+    });
     sendMail([user.email], "Request for event", "Request details ", html).catch(
       (err) => console.log(err)
     );
@@ -58,16 +58,15 @@ module.exports = {
           if (error) console.log(error);
           else if (result && result.length) {
             let emails = result.map((item) => item.email);
-            const html =
-              "<p><b> Event type </b>: " +
-              eventInfo.eventType +
-              "</p>" +
-              "<p><b> Event name </b>: " +
-              eventInfo.eventName +
-              "</p>" +
-              "<p><b> Budget </b>: " +
-              eventInfo.budget +
-              "</p>";
+            let html = "";
+            Object.keys(formFields).map((item) => {
+              html +=
+                "<p><b>" +
+                formFields[item] +
+                "</b> : " +
+                eventInfo[formFields[item]] +
+                "</p>";
+            });
             sendMail(
               emails,
               requestedUser.name + " requested an event approval",

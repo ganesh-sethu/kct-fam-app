@@ -6,8 +6,7 @@ import Box from "@mui/material/Box";
 import { Button, Divider } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
-import Upcoming from "./Upcoming/UpcomingEvents";
-import Previous from "./Previous/PreviousEvents";
+
 const useStyles = makeStyles((theme) =>
   createStyles({
     container: {},
@@ -81,10 +80,10 @@ export default function BasicTabs(props) {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Upcoming />
+          No upcoming events
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Previous />
+          No previous events
         </TabPanel>
       </Box>
     </div>

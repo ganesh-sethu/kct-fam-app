@@ -17,7 +17,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Dashboard from "../Dashboard/Dashboard";
+import Dashboard from "../Temp/Dashboard";
 import { createStyles, makeStyles } from "@mui/styles";
 import PageNotFound from "../404/404";
 import Events from "../Events/Events";
@@ -28,6 +28,8 @@ import { login } from "../../state/slices/authenticationSlice";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { Badge, Typography } from "@mui/material";
 import NewEvent from "../NewEvent/NewEvent";
+import Analysis from "../Analysis/Analysis";
+import Budget from "../Budget/Budget";
 
 const drawerWidth = 240;
 
@@ -290,9 +292,60 @@ export default function PersistentDrawerLeft() {
           >
             <ListItemText primary="Reports" />
           </ListItem>
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "analysis"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
+            button
+            onClick={() => {
+              setActive("analysis");
+              navigate("/analysis");
+            }}
+          >
+            <ListItemText primary="Analysis" />
+          </ListItem>
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "budget"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
+            button
+            onClick={() => {
+              setActive("budget");
+              navigate("/budget");
+            }}
+          >
+            <ListItemText primary="Budget" />
+          </ListItem>
         </List>
+        <Divider />
 
         <List>
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+            }}
+            button
+            onClick={() => {
+              setActive("budget");
+              navigate("/profile");
+            }}
+          >
+            <ListItemText primary="Profile" />
+          </ListItem>
           <ListItem
             sx={{
               "&:hover": {
@@ -327,6 +380,8 @@ export default function PersistentDrawerLeft() {
             }
           />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/analysis" element={<Analysis />} />
+          <Route path="/budget" element={<Budget />} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Main>

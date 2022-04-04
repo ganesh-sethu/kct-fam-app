@@ -31,10 +31,8 @@ export default function BasicSelect({
   name,
   label,
 }) {
-  const [value, setValue] = React.useState(initialValue);
   const classes = useStyles();
   const handleChange = (event) => {
-    setValue(event.target.value);
     setFormData({ ...formData, [name]: event.target.value });
   };
 
@@ -47,7 +45,7 @@ export default function BasicSelect({
       <p className={classes.colon}>:</p>
       <Select
         variant="standard"
-        value={value}
+        value={formData[name]}
         label={label}
         onChange={handleChange}
         className={classes.select}

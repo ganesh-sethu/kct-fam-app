@@ -1,6 +1,6 @@
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
+import TextAreaField from "@mui/material/TextareaAutosize";
 import { createStyles, makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) =>
@@ -22,30 +22,32 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function BasicSelect({
+export default function TextArea({
   formData,
   setFormData,
   initialValue,
   name,
 }) {
+  const [value, setValue] = React.useState(initialValue);
   const classes = useStyles();
   const handleChange = (event) => {
+    setValue(event.target.value);
     setFormData({ ...formData, [name]: event.target.value });
   };
 
   return (
     <FormControl
       className={classes.container}
-      sx={{ flexDirection: "row", gap: "1rem" }}
+      sx={{ flexDirection: "row", gap: "1rem", marginTop: "1rem" }}
     >
       <p className={classes.label}>{name} </p>
       <p className={classes.colon}>:</p>
-      <TextField
-        value={formData[name]}
+      <TextAreaField
+        value={value}
         onChange={handleChange}
         className={classes.textField}
-        variant="standard"
         sx={{ marginTop: "1rem" }}
+        minRows={6}
       />
     </FormControl>
   );
