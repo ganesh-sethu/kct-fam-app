@@ -31,34 +31,69 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-export default function Dashboard() {
+export default function Dashboard({requests,events}) {
   const classes = useStyles();
+  console.log(events)
   return (
     <div className={classes.root}>
       <div className={classes.upper}>
-        <Paper className={classes.left} elevation={3}>
+        <Paper className={classes.left} elevation={3} sx={{overflowY:"auto"}}>
           <h4>Pending Requests</h4>
           <Divider />
-          <Paper
-            className={classes.request}
-            sx={{
-              padding: "0.5rem",
-              background: "#E8EAF6",
-              fontSize: "14px",
-              marginTop: "1rem",
-            }}
-          >
-            <h3>AI Workshop</h3>
-            <p>10 jan 2022 - 11 Jan 2022</p>
-            <p>Organized by John from CSE dept</p>
-          </Paper>
+          {
+            requests && requests.length? 
+              <>
+              {requests.map((item,i) => {
+                return (
+                  <Paper
+                    key={i}
+                    className={classes.request}
+                    sx={{
+                      padding: "0.5rem",
+                      background: "#E8EAF6",
+                      fontSize: "14px",
+                      marginTop: "1rem",
+                    }}
+                    >
+                    <h3>{item.event_info["Title of the Programme"]}</h3>
+                    <p>{item.event_info["From"]} - {item.event_info["To"]}</p>
+                    <p>{item.event_info["Event Type"]} by {item.name}</p>
+                </Paper>
+                )
+              })}
+              </>
+            :<p>No Pending Requests</p>
+          }
+          
         </Paper>
-        <Paper className={classes.right} elevation={3}>
-          <h4>Events</h4>
+        <Paper className={classes.left} elevation={3} sx={{overflowY:"auto"}}>
+          <h4>Upcoming Events</h4>
           <Divider />
-          <p style={{ marginTop: "5rem", textAlign: "center" }}>
-            No upcoming events
-          </p>
+          {
+            events && events.length? 
+              <>
+              {events.map((item,i) => {
+                return (
+                  <Paper
+                    key={i}
+                    className={classes.request}
+                    sx={{
+                      padding: "0.5rem",
+                      background: "#E8EAF6",
+                      fontSize: "14px",
+                      marginTop: "1rem",
+                    }}
+                    >
+                    <h3>{item.event_info["Title of the Programme"]}</h3>
+                    <p>{item.event_info["From"]} - {item.event_info["To"]}</p>
+                    <p>{item.event_info["Event Type"]} by {item.name}</p>
+                </Paper>
+                )
+              })}
+              </>
+            :<p>No Upcoming events</p>
+          }
+          
         </Paper>
       </div>
       <Paper className={classes.lower} elevation={3}>

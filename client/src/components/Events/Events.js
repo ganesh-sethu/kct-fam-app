@@ -77,7 +77,7 @@ export default function BasicTabs(props) {
             aria-label="basic tabs example"
           >
             <Tab label="Upcoming" {...a11yProps(0)} />
-            <Tab label="Previous" {...a11yProps(1)} />
+            <Tab label="Completed Events" {...a11yProps(1)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>

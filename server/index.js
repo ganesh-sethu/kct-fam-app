@@ -22,8 +22,10 @@ app.use("/api", require("./routes/authenticateRoute"));
 app.use("/api/request", require("./routes/requestsRoute"));
 app.use("/api/events", require("./routes/eventsRoute"));
 app.use("/api/users", require("./routes/userRoute"));
+app.use("/api/departments", require("./routes/departmentRoute"));
 
 //server listen port
 app.listen(PORT, () => {
   console.log(`app running on port ${PORT} successfully`);
 });
+
