@@ -68,7 +68,7 @@ export default function Requests({ requests, updateRequests }) {
                 </p>
               </div>
               <div>
-                <h1> &#8377; {item.event_info.budget}</h1>
+                <h1> &#8377; {item.event_info.Budget}</h1>
               </div>
             </div>
             <p
