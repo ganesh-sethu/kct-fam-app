@@ -94,7 +94,8 @@ export default function PersistentDrawerLeft() {
   const [active, setActive] = React.useState("dashboard");
   const [requests, setRequests] = React.useState([]);
   const [events, setEvents] = React.useState([]);
-
+  const [departments,setDepartments] = React.useState([])
+  const [department,setDepartment] = React.useState({})
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -131,6 +132,32 @@ export default function PersistentDrawerLeft() {
 
   }
 
+  const getDepartments = (token) => {
+    axios
+      .get(apiEndPoints.getDepartments, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        setDepartments(res.data.departments);
+        let userStr = localStorage.getItem("user")
+        if(res.data.departments && res.data.departments.length  && userStr){
+          let user = JSON.parse(userStr);
+           res.data.departments.map(item => {
+             if(item.department === user.department){
+               setDepartment({...item,...user})
+             }
+             return item
+           })
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }
+
   const updateRequests = (id) => {
     setRequests(requests.filter((item) => item.request_id !== id));
   };
@@ -147,10 +174,9 @@ export default function PersistentDrawerLeft() {
         })
         .then((res) => {
           dispatch(login(res.data));
-          //requests
           getRequests(token);
-          //upcoming events
           getEvents(token);
+          getDepartments(token)
           
         })
         .catch((err) => {
@@ -383,8 +409,8 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open} className={classes.toolbar}>
         <Routes>
-          <Route path="/" element={<Dashboard requests={requests}  events={events}/>} />
-          <Route path="/dashboard" element={<Dashboard requests={requests} />} />
+          <Route path="/" element={<Dashboard requests={requests}  events={events} department={department} />} />
+          <Route path="/dashboard" element={<Dashboard requests={requests}  events={events} department={department} />} />
           <Route path="/events" element={<Events value="upcoming" />} />
           <Route
             path="/events/upcoming"

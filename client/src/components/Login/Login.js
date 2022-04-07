@@ -59,9 +59,8 @@ export default function SignInSide() {
       })
       .then((res) => {
         setLoad(false);
-
         localStorage.setItem("token", "Bearer " + res.data.accessToken);
-
+        localStorage.setItem("user",JSON.stringify(res.data))
         navigate("/");
       })
       .catch((err) => {

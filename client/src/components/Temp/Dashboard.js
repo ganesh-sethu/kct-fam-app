@@ -1,6 +1,7 @@
 import React from "react";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Divider, Paper } from "@mui/material";
+import Budget from "../Budget/Budget";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,9 +32,9 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-export default function Dashboard({requests,events}) {
+export default function Dashboard({requests,events,department}) {
   const classes = useStyles();
-  console.log(events)
+  console.log(department)
   return (
     <div className={classes.root}>
       <div className={classes.upper}>
@@ -100,8 +101,8 @@ export default function Dashboard({requests,events}) {
         <h3>Budget status</h3>
         <Divider />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Allocated Budget - &#8377; 1,00,000 </h4>
-          <h4>Department - Computer Science and Engineering</h4>
+          <h4>Allocated Budget - &#8377; {department.allocated_budget} </h4>
+          <h4>Department - {department.department_name}</h4>
         </div>
         <div
           style={{
@@ -112,11 +113,13 @@ export default function Dashboard({requests,events}) {
           }}
         >
           <h2 style={{ color: "green" }}>
-            Available Budget - &#8377; 1,00,000{" "}
+            Available Budget - &#8377; {department.allocated_budget - department.budget_used}
           </h2>
-          <h2 style={{ color: "red" }}>Used Budget - &#8377; 0</h2>
+          <h2 style={{ color: "red" }}>Used Budget - &#8377; {department.budget_used}</h2>
         </div>
       </Paper>
+
+      
     </div>
   );
 }
