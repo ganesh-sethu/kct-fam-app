@@ -1,7 +1,6 @@
 import React from "react";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Divider, Paper } from "@mui/material";
-import Budget from "../Budget/Budget";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

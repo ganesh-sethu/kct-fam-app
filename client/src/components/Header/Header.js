@@ -96,6 +96,7 @@ export default function PersistentDrawerLeft() {
   const [events, setEvents] = React.useState([]);
   const [departments,setDepartments] = React.useState([])
   const [department,setDepartment] = React.useState({})
+  const [users,setUsers] = React.useState([])
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -129,6 +130,25 @@ export default function PersistentDrawerLeft() {
       .catch((err) => {
         console.log(err);
       });
+
+  }
+
+  const getUsers = (token) => {
+
+    axios
+      .get(apiEndPoints.getAllUsers, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        setUsers(res.data.users);
+        console.log(res.data.users)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
 
   }
 
@@ -177,6 +197,7 @@ export default function PersistentDrawerLeft() {
           getRequests(token);
           getEvents(token);
           getDepartments(token)
+          getUsers(token)
           
         })
         .catch((err) => {
@@ -427,7 +448,7 @@ export default function PersistentDrawerLeft() {
               <Requests requests={requests} updateRequests={updateRequests} />
             }
           />
-          <Route path="/reports" element={<Reports />} />
+          <Route path="/reports" element={<Reports departments={departments} users={users} />} />
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/budget" element={<Budget department={department} />} />
           <Route path="/*" element={<PageNotFound />} />
