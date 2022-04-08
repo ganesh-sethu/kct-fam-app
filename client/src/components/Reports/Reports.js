@@ -1,17 +1,17 @@
 import React from "react";
 import { createStyles, makeStyles } from "@mui/styles";
-import { Divider, MenuItem, Paper, Select } from "@mui/material";
-import { padding } from "@mui/system";
-
+import { Button, Divider, MenuItem, Paper, Select,TextField } from "@mui/material";
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 const useStyles = makeStyles((theme) =>
   createStyles({
     wrapper : {
       display:"flex",
       flexDirection:"row",
       width:"100%",
-      justifyContent:"space-evenly"
-
-
+      justifyContent:"space-evenly",
+      marginBottom:"1rem"
     },
     select : {
       width:"50%",
@@ -30,10 +30,17 @@ export default function Reports({departments,users}) {
   const [reportType,setReportType]=React.useState("date")
   const [department,setDepartment] = React.useState("none")
   const [faculty,setFaculty] = React.useState("none")
+  const [from,setFrom] = React.useState(new Date())
+  const [to,setTo] = React.useState(new Date())
   const classes = useStyles();
-  return <div>
+
+  const handleSubmit = () => {
+    const data = { reportType,department,faculty,from,to }
+    console.log(data)
+  
+  }
+  return  <LocalizationProvider dateAdapter={AdapterDateFns}>
     <div>
-      <div >
         <div className={classes.wrapper}>
           <p className={classes.label}>Choose Report Type  </p>
           <p>:  </p>
@@ -101,55 +108,31 @@ export default function Reports({departments,users}) {
         <div className={classes.wrapper} style={{display: reportType==="date"?"flex":"none"}}>
           <p className={classes.label}>From </p>
           <p>:  </p>
-          <Select
-            value={reportType}
-            variant="standard"
-            placeholder="Choose report type"
-            label="Choose repdorts"
-            onChange={(e) => setReportType(e.target.value)}
-            className={classes.select}
-            >
-            <MenuItem value="date">
-                Date wise
-            </MenuItem>
-            <MenuItem value="department">
-                Department wise
-            </MenuItem>
-            <MenuItem value="faculty">
-                Faculty wise
-            </MenuItem>
-          </Select>
+          <div className={classes.select}>
+            <DesktopDatePicker
+              inputFormat="dd/MM/yyyy"
+              value={from}
+              onChange={(val) => setFrom(val)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </div>
         </div>
         <div className={classes.wrapper} style={{display: reportType==="date"?"flex":"none"}}>
           <p className={classes.label}>To </p>
           <p>:  </p>
-          <Select
-            value={reportType}
-            variant="standard"
-            placeholder="Choose report type"
-            label="Choose repdorts"
-            onChange={(e) => setReportType(e.target.value)}
-            className={classes.select}
-            >
-            <MenuItem value="date">
-                Date wise
-            </MenuItem>
-            <MenuItem value="department">
-                Department wise
-            </MenuItem>
-            <MenuItem value="faculty">
-                Faculty wise
-            </MenuItem>
-          </Select>
+          <div className={classes.select}>
+            <DesktopDatePicker
+              inputFormat="dd/MM/yyyy"
+              value={to}
+              onChange={(val) => setTo(val)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </div>
+        </div> 
+        <div className={classes.wrapper}>
+            <Button sx={{width:"200px",margin:"2rem 0"}} variant="contained" onClick={handleSubmit}>Show Report</Button>  
         </div>
-        
-          
       
-      
-
-
-      </div>
-      
-    </div>
-  </div>;
+  </div>
+  </LocalizationProvider> ;
 }
