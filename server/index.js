@@ -28,4 +28,3 @@ app.use("/api/departments", require("./routes/departmentRoute"));
 app.listen(PORT, () => {
   console.log(`app running on port ${PORT} successfully`);
 });
-

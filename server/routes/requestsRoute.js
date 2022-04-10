@@ -20,6 +20,38 @@ const {
   APPROVED,
 } = require("../common/constants");
 
+const updateBudget = (department) => {
+  let budgetUsed = department.budget_used + department.budget;
+  db.query(
+    "update departments set budget_used=? where department = ?",
+    [budgetUsed, department.department],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else if (result && result.affectedRows) {
+        console.log("Budget Updated");
+      } else {
+        console.log(result);
+      }
+    }
+  );
+};
+const reduceBudget = (reqId) => {
+  db.query(
+    "select u.department,JSON_EXTRACT(event_info,'$.Budget') as budget,d.budget_used from users u,requests r,departments d where r.emp_id = u.emp_id and u.department = d.department and request_id=?",
+    [reqId],
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else if (result && result.length) {
+        updateBudget({ ...result[0], budget: parseInt(result[0].budget) });
+      } else {
+        console.log(result);
+      }
+    }
+  );
+};
+
 router.post("/", authenticate.auth, (req, res) => {
   let userLevel = findUserVal(req.user);
   let nextUserLevel = 0;
@@ -164,6 +196,7 @@ router.put("/approve", authenticate.auth, (req, res) => {
         error,
       });
     } else if (result && result.affectedRows) {
+      reduceBudget(req.body.requestId);
       res.send({
         msg: "Request approved",
       });

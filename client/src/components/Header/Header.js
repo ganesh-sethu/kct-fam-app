@@ -94,9 +94,9 @@ export default function PersistentDrawerLeft() {
   const [active, setActive] = React.useState("dashboard");
   const [requests, setRequests] = React.useState([]);
   const [events, setEvents] = React.useState([]);
-  const [departments,setDepartments] = React.useState([])
-  const [department,setDepartment] = React.useState({})
-  const [users,setUsers] = React.useState([])
+  const [departments, setDepartments] = React.useState([]);
+  const [department, setDepartment] = React.useState({});
+  const [users, setUsers] = React.useState([]);
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -130,11 +130,9 @@ export default function PersistentDrawerLeft() {
       .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
 
   const getUsers = (token) => {
-
     axios
       .get(apiEndPoints.getAllUsers, {
         headers: {
@@ -143,14 +141,12 @@ export default function PersistentDrawerLeft() {
       })
       .then((res) => {
         setUsers(res.data.users);
-        console.log(res.data.users)
+        console.log(res.data.users);
       })
       .catch((err) => {
         console.log(err);
       });
-    
-
-  }
+  };
 
   const getDepartments = (token) => {
     axios
@@ -161,22 +157,21 @@ export default function PersistentDrawerLeft() {
       })
       .then((res) => {
         setDepartments(res.data.departments);
-        let userStr = localStorage.getItem("user")
-        if(res.data.departments && res.data.departments.length  && userStr){
+        let userStr = localStorage.getItem("user");
+        if (res.data.departments && res.data.departments.length && userStr) {
           let user = JSON.parse(userStr);
-           res.data.departments.map(item => {
-             if(item.department === user.department){
-               setDepartment({...item,...user})
-             }
-             return item
-           })
+          res.data.departments.map((item) => {
+            if (item.department === user.department) {
+              setDepartment({ ...item, ...user });
+            }
+            return item;
+          });
         }
       })
       .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
 
   const updateRequests = (id) => {
     setRequests(requests.filter((item) => item.request_id !== id));
@@ -185,7 +180,6 @@ export default function PersistentDrawerLeft() {
   useEffect(() => {
     let token = localStorage.getItem("token");
     if (token) {
-      
       axios
         .get(apiEndPoints.getUser, {
           headers: {
@@ -196,9 +190,8 @@ export default function PersistentDrawerLeft() {
           dispatch(login(res.data));
           getRequests(token);
           getEvents(token);
-          getDepartments(token)
-          getUsers(token)
-          
+          getDepartments(token);
+          getUsers(token);
         })
         .catch((err) => {
           if (
@@ -430,8 +423,26 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open} className={classes.toolbar}>
         <Routes>
-          <Route path="/" element={<Dashboard requests={requests}  events={events} department={department} />} />
-          <Route path="/dashboard" element={<Dashboard requests={requests}  events={events} department={department} />} />
+          <Route
+            path="/"
+            element={
+              <Dashboard
+                requests={requests}
+                events={events}
+                department={department}
+              />
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <Dashboard
+                requests={requests}
+                events={events}
+                department={department}
+              />
+            }
+          />
           <Route path="/events" element={<Events value="upcoming" />} />
           <Route
             path="/events/upcoming"
@@ -448,7 +459,10 @@ export default function PersistentDrawerLeft() {
               <Requests requests={requests} updateRequests={updateRequests} />
             }
           />
-          <Route path="/reports" element={<Reports departments={departments} users={users} />} />
+          <Route
+            path="/reports"
+            element={<Reports departments={departments} users={users} />}
+          />
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/budget" element={<Budget department={department} />} />
           <Route path="/*" element={<PageNotFound />} />
