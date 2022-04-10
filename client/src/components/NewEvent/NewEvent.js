@@ -50,45 +50,50 @@ export default function NewEvent() {
   const eventTypes = ["Organize event", "Attend event"];
 
   const handleSubmit = () => {
-    console.log(formData);
-    // setAlert(undefined);
-    // let token = localStorage.getItem("token");
-    // if (token) {
-    //   axios
-    //     .post(
-    //       apiEndPoints.postRequest,
-    //       {
-    //         ...formData,
-    //       },
-    //       {
-    //         headers: {
-    //           Authorization: token,
-    //         },
-    //       }
-    //     )
-    //     .then((res) => {
-    //       setAlert(
-    //         <Alert
-    //           sx={{ marginTop: "1rem" }}
-    //           variant="filled"
-    //           severity="success"
-    //         >
-    //           Request sent successfully
-    //         </Alert>
-    //       );
-    //       console.log(res);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //       setAlert(
-    //         <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="error">
-    //           Error sending request.Try later
-    //         </Alert>
-    //       );
-    //     });
-    // } else {
-    //   navigate("/login");
-    // }
+    setAlert(undefined);
+    let token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .post(
+          apiEndPoints.postRequest,
+          {
+            ...formData,
+            [formFields.from]: new Date(formData[formFields.from])
+              .toJSON()
+              .slice(0, 10),
+            [formFields.to]: new Date(formData[formFields.to])
+              .toJSON()
+              .slice(0, 10),
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then((res) => {
+          setAlert(
+            <Alert
+              sx={{ marginTop: "1rem" }}
+              variant="filled"
+              severity="success"
+            >
+              Request sent successfully
+            </Alert>
+          );
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          setAlert(
+            <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="error">
+              Error sending request.Try later
+            </Alert>
+          );
+        });
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -148,8 +153,10 @@ export default function NewEvent() {
             <p className={classes.colon}>:</p>
             <DesktopDatePicker
               inputFormat="dd/MM/yyyy"
-              value={formData.from}
-              onChange={(val) => setFormData({ ...formData, from: val })}
+              value={formData[formFields.from]}
+              onChange={(val) =>
+                setFormData({ ...formData, [formFields.from]: val })
+              }
               renderInput={(params) => (
                 <DateTextField {...params} sx={{ width: "75%" }} />
               )}
@@ -165,8 +172,11 @@ export default function NewEvent() {
             <p className={classes.colon}>:</p>
             <DesktopDatePicker
               inputFormat="dd/MM/yyyy"
-              value={formData.to}
-              onChange={(val) => setFormData({ ...formData, to: val })}
+              value={formData[formFields.to]}
+              onChange={(val) => {
+                setFormData({ ...formData, [formFields.to]: val });
+                console.log(val);
+              }}
               renderInput={(params) => (
                 <DateTextField {...params} sx={{ width: "75%" }} />
               )}

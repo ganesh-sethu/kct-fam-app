@@ -11,7 +11,8 @@ const apiEndPoints = {
   postRequest: prefixBackEndURI("/api/request"),
   getUpComingEvents: prefixBackEndURI("/api/events"),
   getDepartments: prefixBackEndURI("/api/departments"),
-  getAllUsers:prefixBackEndURI("/api/users/all")
+  getAllUsers: prefixBackEndURI("/api/users/all"),
+  getReport: prefixBackEndURI("/api/reports"),
 };
 
 export default apiEndPoints;

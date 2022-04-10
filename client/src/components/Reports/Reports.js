@@ -12,6 +12,9 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Table from "./Table";
+import apiEndPoints from "../../common/apiEndPoints";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) =>
   createStyles({
     wrapper: {
@@ -37,11 +40,45 @@ export default function Reports({ departments, users }) {
   const [faculty, setFaculty] = React.useState("none");
   const [from, setFrom] = React.useState(new Date());
   const [to, setTo] = React.useState(new Date());
+  const [events, setEvents] = React.useState([]);
+  const [showReport, setShowReport] = React.useState(false);
+  let navigate = useNavigate();
   const classes = useStyles();
 
   const handleSubmit = () => {
-    const data = { reportType, department, faculty, from, to };
-    console.log(data);
+    const data = {
+      reportType,
+      department,
+      faculty,
+      from: new Date(from).toJSON().slice(0, 10),
+      to: new Date(to).toJSON().slice(0, 10),
+    };
+
+    let token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .post(
+          apiEndPoints.getReport,
+          { ...data },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then((res) => {
+          setShowReport(true);
+          console.log(res.data);
+          setEvents(res.data.events);
+        })
+        .catch((err) => {
+          setShowReport(true);
+          console.log(err);
+          console.log(err.response);
+        });
+    } else {
+      navigate("/login");
+    }
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -54,7 +91,10 @@ export default function Reports({ departments, users }) {
             variant="standard"
             placeholder="Choose report type"
             label="Choose report type"
-            onChange={(e) => setReportType(e.target.value)}
+            onChange={(e) => {
+              setReportType(e.target.value);
+              setShowReport(false);
+            }}
             className={classes.select}
           >
             <MenuItem value="date">Date wise</MenuItem>
@@ -151,7 +191,7 @@ export default function Reports({ departments, users }) {
             Show Report
           </Button>
         </div>
-        <Table />
+        {showReport ? <Table events={events} /> : undefined}
       </div>
     </LocalizationProvider>
   );

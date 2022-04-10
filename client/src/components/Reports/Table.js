@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import formFields from "../../common/formFields";
+import { Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,45 +42,79 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function CustomizedTables() {
-  return (
-    <TableContainer component={Paper}>
-      <Table
-        sx={{ minWidth: 700 }}
-        aria-label="customized table"
-        id="reportTable"
-      >
-        <TableHead>
-          <TableRow>
-            <StyledTableCell align="center">{formFields.title}</StyledTableCell>
-            <StyledTableCell align="center">{formFields.from}</StyledTableCell>
-            <StyledTableCell align="center">{formFields.to}</StyledTableCell>
-            <StyledTableCell align="center">
-              {formFields.eventType}
-            </StyledTableCell>
-            <StyledTableCell align="center">
-              {formFields.facultyInCharge}
-            </StyledTableCell>
-            <StyledTableCell align="center">
-              {formFields.budget}
-            </StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row" align="center">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.calories}</StyledTableCell>
-              <StyledTableCell align="center">{row.fat}</StyledTableCell>
-              <StyledTableCell align="center">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="center">{row.protein}</StyledTableCell>
-              <StyledTableCell align="center">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+export default function CustomizedTables({ events }) {
+  if (events && events.length) {
+    return (
+      <div>
+        <TableContainer component={Paper}>
+          <Table
+            sx={{ minWidth: 700 }}
+            aria-label="customized table"
+            id="reportTable"
+          >
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">
+                  {formFields.title}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {formFields.from}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {formFields.to}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {formFields.eventType}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {formFields.facultyInCharge}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {formFields.budget}
+                </StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {events.map((row) => (
+                <StyledTableRow key={row.request_id}>
+                  <StyledTableCell align="center">
+                    {row.event_info[formFields.title]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.event_info[formFields.from]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.event_info[formFields.to]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.event_info[formFields.eventType]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.event_info[formFields.facultyInCharge]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.event_info[formFields.budget]}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "2rem",
+          }}
+        >
+          <Button variant="contained" color="success">
+            Download
+          </Button>
+        </div>
+      </div>
+    );
+  } else {
+    return <h3>No results found</h3>;
+  }
 }
