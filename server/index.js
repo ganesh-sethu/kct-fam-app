@@ -23,9 +23,9 @@ app.use("/api/request", require("./routes/requestsRoute"));
 app.use("/api/events", require("./routes/eventsRoute"));
 app.use("/api/users", require("./routes/userRoute"));
 app.use("/api/departments", require("./routes/departmentRoute"));
+app.use("/api/reports", require("./routes/reportRoute"));
 
 //server listen port
 app.listen(PORT, () => {
   console.log(`app running on port ${PORT} successfully`);
 });
-
