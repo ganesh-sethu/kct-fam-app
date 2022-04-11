@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import formFields from "../../common/formFields";
 import { Button } from "@mui/material";
+import common from "../../common/functions";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -108,7 +109,8 @@ export default function CustomizedTables({ events }) {
             marginTop: "2rem",
           }}
         >
-          <Button variant="contained" color="success">
+          {/* <Button variant="contained" color="success" onClick={common.downloadTableAsCSV("reportTable")}> */}
+          <Button variant="contained" color="success" onClick={() => common.downloadTableAsCSV("reportTable")}>
             Download
           </Button>
         </div>
