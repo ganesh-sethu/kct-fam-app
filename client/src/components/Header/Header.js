@@ -463,7 +463,7 @@ export default function PersistentDrawerLeft() {
             path="/reports"
             element={<Reports departments={departments} users={users} />}
           />
-          <Route path="/analysis" element={<Analysis />} />
+          <Route path="/analysis" element={<Analysis departments={departments}/>} />
           <Route path="/budget" element={<Budget department={department} />} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
