@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Departments from './Departments/Departments';
+import Users from "./Users/Users"
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,7 +60,7 @@ export default function BasicTabs({departments}) {
         <Departments departments={departments}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Users
+        <Users departments={departments}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Change Academic Year
