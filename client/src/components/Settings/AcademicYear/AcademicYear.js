@@ -1,7 +1,7 @@
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Button, TextField } from '@mui/material';
+import { Alert, Button, TextField } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
 import apiEndPoints from '../../../common/apiEndPoints';
@@ -13,6 +13,7 @@ export default function AcademicYear() {
   const [to,setTo] = React.useState(null)
   const [token,setToken] = React.useState(localStorage.getItem("token"))
   const [isNull,setIsNull] = React.useState(true)
+  const [alert,setAlert] = React.useState(undefined)
   let navigate = useNavigate();
   const getAcademicYear = (token) => {
     axios
@@ -48,6 +49,7 @@ export default function AcademicYear() {
   },[])
 
   const updateAcademicYear = () => {
+      setAlert(undefined)
       axios.put(apiEndPoints.editAcademicYear,{
         academicYear : new Date(from).getFullYear() +"-"+new Date(to).getFullYear()
       },{
@@ -55,15 +57,25 @@ export default function AcademicYear() {
           Authorization: token,
         },
       }).then(res => {
+        setAlert(
+          <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="success">
+            {res.data.msg}
+          </Alert>
+        );
         console.log(res.data)
       }).catch(err => {
-        console.log(err.response)
+        setAlert(
+          <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="error">
+            Error occured! try later
+          </Alert>
+        );
       })
 
   }
 
 
   const insertAcademicYear = () => {
+    setAlert(undefined)
     axios.post(apiEndPoints.createAcademicYear,{
       academicYear : new Date(from).getFullYear() +"-"+new Date(to).getFullYear()
     },{
@@ -71,9 +83,17 @@ export default function AcademicYear() {
         Authorization: token,
       },
     }).then(res => {
-      console.log(res.data)
+      setAlert(
+        <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="success">
+          {res.data.msg}
+        </Alert>
+      );
     }).catch(err => {
-      console.log(err.response)
+      setAlert(
+        <Alert sx={{ marginTop: "1rem" }} variant="filled" severity="error">
+          Error occured! try later
+        </Alert>
+      );
     })
 
   }
@@ -106,5 +126,6 @@ export default function AcademicYear() {
                 />
                 <Button variant="contained" color="primary" onClick={handleSave}>Save</Button> 
               </div>
+              {alert}
           </LocalizationProvider>
 }
