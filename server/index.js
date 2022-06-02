@@ -24,6 +24,7 @@ app.use("/api/events", require("./routes/eventsRoute"));
 app.use("/api/users", require("./routes/userRoute"));
 app.use("/api/departments", require("./routes/departmentRoute"));
 app.use("/api/reports", require("./routes/reportRoute"));
+app.use("/api/academic-year", require("./routes/academicYearRoute"));
 
 //server listen port
 app.listen(PORT, () => {

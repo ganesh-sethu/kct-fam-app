@@ -13,6 +13,9 @@ const apiEndPoints = {
   getDepartments: prefixBackEndURI("/api/departments"),
   getAllUsers: prefixBackEndURI("/api/users/all"),
   getReport: prefixBackEndURI("/api/reports"),
+  getAcademicYear : prefixBackEndURI("/api/academic-year"),
+  editAcademicYear:prefixBackEndURI("/api/academic-year"),
+  createAcademicYear:prefixBackEndURI("/api/academic-year")
 };
 
 export default apiEndPoints;

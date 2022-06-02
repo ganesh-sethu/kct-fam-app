@@ -41,7 +41,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({departments}) {
+export default function BasicTabs({departments,academicYear}) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -64,7 +64,7 @@ export default function BasicTabs({departments}) {
         <Users departments={departments}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <AcademicYear/>
+        <AcademicYear academicYear={academicYear}/>
       </TabPanel>
     </Box>
   );
