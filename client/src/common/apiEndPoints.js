@@ -10,6 +10,7 @@ const apiEndPoints = {
   rejectRequest: prefixBackEndURI("/api/request/reject"),
   postRequest: prefixBackEndURI("/api/request"),
   getUpComingEvents: prefixBackEndURI("/api/events"),
+  getCompletedEvents: prefixBackEndURI("/api/events/completed"),
   getDepartments: prefixBackEndURI("/api/departments"),
   getAllUsers: prefixBackEndURI("/api/users/all"),
   getReport: prefixBackEndURI("/api/reports"),

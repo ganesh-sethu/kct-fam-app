@@ -34,7 +34,7 @@ export default function AcademicYear() {
       .catch((err) => {
         if(err && err.response && err.response.data && err.response.data.msg){
           setIsNull(true)
-          alert(err.response.data.msg)
+          console.log(err.response.data)
         }
       });
   }
