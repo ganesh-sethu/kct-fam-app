@@ -18,7 +18,10 @@ const apiEndPoints = {
   editAcademicYear:prefixBackEndURI("/api/academic-year"),
   createAcademicYear:prefixBackEndURI("/api/academic-year"),
   submitProof : prefixBackEndURI("/api/events/proof"),
-  deleteProof : prefixBackEndURI("/api/events/proof/delete")
+  deleteProof : prefixBackEndURI("/api/events/proof/delete"),
+  register:prefixBackEndURI("/api/register")
+  
+
 };
 
 export default apiEndPoints;

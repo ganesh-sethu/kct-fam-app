@@ -443,24 +443,6 @@ export default function PersistentDrawerLeft() {
               "&:hover": {
                 background: theme.palette.primary.light,
               },
-              background:
-                active === "profile"
-                  ? theme.palette.primary.dark
-                  : theme.palette.primary.main,
-            }}
-            button
-            onClick={() => {
-              setActive("profile");
-              navigate("/profile");
-            }}
-          >
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <ListItem
-            sx={{
-              "&:hover": {
-                background: theme.palette.primary.light,
-              },
               
             }}
             button

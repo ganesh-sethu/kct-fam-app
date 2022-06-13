@@ -49,4 +49,42 @@ router.post("/login", (req, res) => {
     }
   );
 });
+
+router.post("/register",(req,res) => {
+  bcrypt.hash(req.body.password, 10, (bcryptErr, hashedPassword) => {
+    if (bcryptErr) {
+      console.log(bcryptErr);
+      res.status(500).send({
+        msg: "Error in bcrypt",
+        err: bcryptErr,
+      });
+    } else {
+      db.query("update users set password = ? where email = ?",[hashedPassword,req.body.email],(error, result) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send({
+            error,
+          });
+        } else if (result && !result.affectedRows && !result.fieldCount) {
+          res.status(500).send({
+            msg: "Email id not found.Contact admin",
+          });
+        }else if (result && result.affectedRows) {
+          res.send({
+            msg: "Registered successfully",
+          });
+          
+        } else {
+          res.status(500).send({
+            result,
+          });
+        }
+      })   
+    }
+  });
+
+
+
+ 
+})
 module.exports = router;
