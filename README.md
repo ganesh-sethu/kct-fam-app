@@ -8,12 +8,13 @@
 
 - Install nodejs and npm
 - clone the repo
-- Navigate to client directory  `cd client`
-- `npm install`
-- `npm start`
 - Navigate to server directory  `cd server`
 - `npm install`
 - `nodemon`
+- Navigate to client directory  `cd client`
+- `npm install`
+- `npm start`
+
 
 
 Go to <http://localhost:3000>
