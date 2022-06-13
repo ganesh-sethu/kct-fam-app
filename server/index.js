@@ -3,6 +3,7 @@ const app = express();
 const db = require("./db/db");
 const cors = require("cors");
 const sendMail = require("./common/mail");
+const fileUpload = require("express-fileupload")
 require("dotenv").config();
 
 const PORT = process.env.SERVER_PORT;
@@ -13,6 +14,7 @@ const corsOption = {
 db.connect();
 
 //midlewares
+app.use(fileUpload())
 app.use(express.json());
 app.use(cors(corsOption));
 
@@ -24,8 +26,10 @@ app.use("/api/events", require("./routes/eventsRoute"));
 app.use("/api/users", require("./routes/userRoute"));
 app.use("/api/departments", require("./routes/departmentRoute"));
 app.use("/api/reports", require("./routes/reportRoute"));
+app.use("/api/academic-year", require("./routes/academicYearRoute"));
 
 //server listen port
 app.listen(PORT, () => {
   console.log(`app running on port ${PORT} successfully`);
+  
 });

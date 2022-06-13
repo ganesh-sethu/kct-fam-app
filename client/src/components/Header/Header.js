@@ -98,9 +98,29 @@ export default function PersistentDrawerLeft() {
   const [departments, setDepartments] = React.useState([]);
   const [department, setDepartment] = React.useState({});
   const [users, setUsers] = React.useState([]);
+  const [academicYear,setAcademicYear] = React.useState("")
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
+
+  const getAcademicYear = (token) => {
+    axios
+      .get(apiEndPoints.getAcademicYear, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        setAcademicYear(res.data.year)
+        console.log(res.data)
+      })
+      .catch((err) => {
+        if(err && err.response && err.response.data && err.response.data.msg){
+          alert(err.response.data.msg)
+        }
+      });
+
+  }
   const getRequests = (token) => {
     axios
       .get(apiEndPoints.getRequests, {
@@ -193,6 +213,7 @@ export default function PersistentDrawerLeft() {
           getEvents(token);
           getDepartments(token);
           getUsers(token);
+          getAcademicYear(token)
         })
         .catch((err) => {
           if (
@@ -494,7 +515,7 @@ export default function PersistentDrawerLeft() {
           />
           <Route path="/analysis" element={<Analysis departments={departments}/>} />
           <Route path="/budget" element={<Budget department={department} />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings departments={departments} academicYear={academicYear}/>} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Main>

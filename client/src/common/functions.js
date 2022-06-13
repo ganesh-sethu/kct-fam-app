@@ -22,7 +22,37 @@ const functions = {
     link.click();
     document.body.removeChild(link);
 
+  },
+  userType : (req,user) => {
+
+    if(req.emp_id === user.emp_id) return 1;
+    else if(req.user_level < functions.findUserLevel(user)) return 2;
+    else return 3;
+  },
+  findUserLevel: (user) => {
+    const userLevel = {
+      NORMAL_USER: 0,
+      BUDGET_COORDINATOR: 1,
+      HOD: 2,
+      HR: 3,
+      ARCHIVE: 4,
+      PRINCIPAL: 5,
+      APPROVED: 6,
+      REJECTED: -1,
+    }
+    if (user.designation === "BUDGET") {
+      return userLevel.BUDGET_COORDINATOR;
+    } else if (user.designation === "HOD") {
+      return userLevel.HOD;
+    } else if (user.designation === "HR") {
+      return userLevel.HR;
+    } else if (user.designation === "ARCH_DEPT") {
+      return userLevel.ARCHIVE;
+    } else if (user.designation === "PRINCIPAL") {
+      return userLevel.PRINCIPAL;
+    } else return userLevel.NORMAL_USER;
   }
+
   
 };
 

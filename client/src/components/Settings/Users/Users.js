@@ -10,6 +10,9 @@ import { styled } from "@mui/material/styles";
 import { Button } from '@mui/material';
 import EditModal from "./EditModal"
 import AddModal from "./AddModal"
+import axios from 'axios';
+import apiEndPoints from '../../../common/apiEndPoints';
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -23,14 +26,43 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 
 
+
 export default function BasicTable({departments}) {
   const [editModal, setEditModal] = React.useState(false);
   const [addModal, setAddModal] = React.useState(false);
-  const [department,setDepartment] = React.useState([])
+  const [users,setUsers] = React.useState([])
+  const [user,setUser] = React.useState({})
+  let navigate = useNavigate();
 
-  const handleEditDepartment = (dept) => {
+
+  React.useState(() => {
+    let token = localStorage.getItem("token");
+    if(token){
+        axios.get(apiEndPoints.getAllUsers, {
+            headers: {
+              Authorization: token,
+            },
+          }).then(res => {
+            if(res.data && res.data.users){
+                setUsers(res.data.users)
+            }
+            else
+            {
+                console.log(users)
+            }
+  
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+    else{
+        navigate("/login");
+    }   
+  },[])
+
+  const handleEditUser = (u) => {
     setEditModal(true)
-    setDepartment(dept)
+    setUser(u)
 
   }
 
@@ -38,7 +70,7 @@ export default function BasicTable({departments}) {
     setAddModal(true)
 
   }
-  const labels = ["S.No","Department","Allocated Budget","Used Budget"]
+  const labels = ["S.No","Employee Id","Name","Department","Email Id","Designation"]
   return (
     <div>
       <div style={{width:"100%",display:"flex",flexDirection:"row-reverse",marginBottom:"1rem"}}>
@@ -54,27 +86,29 @@ export default function BasicTable({departments}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {departments.map((row,i) => (
+          {users.map((row,i) => (
             <TableRow
               hover
               key={i}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              onClick={() => handleEditDepartment(row)}
+              onClick={() => handleEditUser(row)}
               style={{cursor:"pointer"}}
     
             >
               <TableCell component="th" scope="row" align="center">
                 {i+1}
               </TableCell>
-              <TableCell align="center">{row.department_name}</TableCell>
-              <TableCell align="center">{row.allocated_budget}</TableCell>
-              <TableCell align="center">{row.budget_used}</TableCell>
+              <TableCell align="center">{row.emp_id}</TableCell>
+              <TableCell align="center">{row.name}</TableCell>
+              <TableCell align="center">{row.department}</TableCell>
+              <TableCell align="center">{row.email}</TableCell>
+              <TableCell align="center">{row.designation}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <EditModal editModal={editModal} setEditModal={setEditModal} department={department}/>
-      <AddModal addModal={addModal} setAddModal={setAddModal} />
+      <EditModal editModal={editModal} setEditModal={setEditModal} user={user} departments={departments}/>
+      <AddModal addModal={addModal} setAddModal={setAddModal} departments={departments}/>
     </TableContainer>
     
     </div>
