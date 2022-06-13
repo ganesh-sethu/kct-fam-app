@@ -23,7 +23,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 
 
-export default function BasicTable({departments}) {
+export default function BasicTable({departments,setValue}) {
   const [editModal, setEditModal] = React.useState(false);
   const [addModal, setAddModal] = React.useState(false);
   const [department,setDepartment] = React.useState([])
@@ -73,8 +73,8 @@ export default function BasicTable({departments}) {
           ))}
         </TableBody>
       </Table>
-      <EditModal editModal={editModal} setEditModal={setEditModal} department={department}/>
-      <AddModal addModal={addModal} setAddModal={setAddModal} />
+      <EditModal editModal={editModal} setEditModal={setEditModal} department={department} setValue={setValue} />
+      <AddModal addModal={addModal} setAddModal={setAddModal} setValue={setValue}  />
     </TableContainer>
     
     </div>

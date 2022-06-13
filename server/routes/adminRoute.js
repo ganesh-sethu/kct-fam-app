@@ -2,40 +2,7 @@ const router = require("express").Router();
 const db = require("../db/db");
 const bcrypt = require("bcrypt");
 const authenticate = require("../common/authenticate");
-router.post(
-  "/department/add",
-  // authenticate.auth,
-  // authenticate.adminAuth,
-  (req, res) => {
-    db.query(
-      "INSERT INTO departments(department,department_name,allocated_budget,budget_used) VALUES(?,?,?,?)",
-      [
-        req.body.department,
-        req.body.departmentName,
-        req.body.allocatedBudget,
-        req.body.budgetUsed,
-      ],
-      (err, result, fields) => {
-        if (err) {
-          if (err.code === "ER_DUP_ENTRY") {
-            res.status(500).send({
-              msg: "Department already exists",
-            });
-          }
-        } else if (result && result.affectedRows) {
-          res.send({
-            msg: "department added",
-          });
-        } else {
-          console.log(result);
-          res.status(500).send({
-            msg: "Error adding department",
-          });
-        }
-      }
-    );
-  }
-);
+
 
 router.post(
   "/users/add",

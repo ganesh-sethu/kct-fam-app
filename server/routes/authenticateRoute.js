@@ -16,6 +16,11 @@ router.post("/login", (req, res) => {
         });
       }
       if (result.length) {
+        if(!result[0].password || result[0].password === null){
+          return res.status(204).send({
+            msg : "User not registered !"
+          })
+        }
         bcrypt.compare(
           req.body.password,
           result[0].password,

@@ -498,6 +498,9 @@ export default function PersistentDrawerLeft() {
           <Route path="/analysis" element={<Analysis departments={departments}/>} />
           <Route path="/budget" element={<Budget department={department} />} />
           <Route path="/settings" element={<Settings departments={departments} academicYear={academicYear}/>} />
+          <Route path="/settings/departments" element={<Settings departments={departments} academicYear={academicYear}/>} />
+          <Route path="/settings/users" element={<Settings departments={departments} academicYear={academicYear}/>} />
+          <Route path="/settings/academic-year" element={<Settings departments={departments} academicYear={academicYear}/>} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Main>
