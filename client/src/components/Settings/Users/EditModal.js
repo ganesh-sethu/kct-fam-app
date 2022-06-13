@@ -84,7 +84,7 @@ export default function AlertDialog({editModal,setEditModal,user,departments}) {
           <div className={classes.container}>
               <p className={classes.label}>Designation : </p>
               <Select
-                value={designation}
+                value={user.designation}
                 onChange={(e) => {console.log(e.target.value);setDesignation(e.target.value)}}
                 className={classes.field}
                 
