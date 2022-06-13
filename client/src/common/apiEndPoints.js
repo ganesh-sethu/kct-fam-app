@@ -16,7 +16,9 @@ const apiEndPoints = {
   getReport: prefixBackEndURI("/api/reports"),
   getAcademicYear : prefixBackEndURI("/api/academic-year"),
   editAcademicYear:prefixBackEndURI("/api/academic-year"),
-  createAcademicYear:prefixBackEndURI("/api/academic-year")
+  createAcademicYear:prefixBackEndURI("/api/academic-year"),
+  submitProof : prefixBackEndURI("/api/events/proof"),
+  deleteProof : prefixBackEndURI("/api/events/proof/delete")
 };
 
 export default apiEndPoints;

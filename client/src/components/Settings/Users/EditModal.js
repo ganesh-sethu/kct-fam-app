@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) =>
 export default function AlertDialog({editModal,setEditModal,user,departments}) {
   const classes = useStyles()
   const [department,setDepartment] = React.useState(user.department)
+  const [designation,setDesignation] = React.useState(user.designation)
   const handleClose = () => {
     setEditModal(false);
   };
@@ -83,17 +84,18 @@ export default function AlertDialog({editModal,setEditModal,user,departments}) {
           <div className={classes.container}>
               <p className={classes.label}>Designation : </p>
               <Select
-                value={0}
-                onChange={(e) => setDepartment(e.target.value)}
+                value={designation}
+                onChange={(e) => {console.log(e.target.value);setDesignation(e.target.value)}}
                 className={classes.field}
                 
               >
-                <MenuItem value={0}>Staff</MenuItem>
-                <MenuItem value={1}>Budget Co-ordinator</MenuItem>
-                <MenuItem value={2}>HOD</MenuItem>
-                <MenuItem value={3}>HR</MenuItem>
-                <MenuItem value={4}>Archival </MenuItem>
-                <MenuItem value={5}>Principal</MenuItem>
+                <MenuItem value={"ADMIN"}>Admin</MenuItem>
+                <MenuItem value={"STAFF"}>Staff</MenuItem>
+                <MenuItem value={"BUDGET"}>Budget Co-ordinator</MenuItem>
+                <MenuItem value={"HOD"}>HOD</MenuItem>
+                <MenuItem value={"HR"}>HR</MenuItem>
+                <MenuItem value={"ARCH_DEPT"}>Archival </MenuItem>
+                <MenuItem value={"PRINCIPAL"}>Principal</MenuItem>
                 
                
               </Select>
