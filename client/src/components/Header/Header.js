@@ -242,6 +242,16 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const isAdmin = () => {
+    let user = localStorage.getItem("user")
+    if(user){
+      let userJson = JSON.parse(user);
+      let designation = userJson.designation;
+      if(designation && designation === "ADMIN")
+        return true
+    }
+    return false;
+  }
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -414,8 +424,7 @@ export default function PersistentDrawerLeft() {
           </ListItem>
         </List>
         <Divider />
-
-        <List>
+        {isAdmin() ?  <List>
           <ListItem
             sx={{
               "&:hover": {
@@ -434,7 +443,8 @@ export default function PersistentDrawerLeft() {
           >
             <ListItemText primary="Settings" />
           </ListItem>
-        </List>
+        </List> : undefined}
+       
         <Divider />
 
         <List>
@@ -497,10 +507,11 @@ export default function PersistentDrawerLeft() {
           />
           <Route path="/analysis" element={<Analysis departments={departments}/>} />
           <Route path="/budget" element={<Budget department={department} />} />
-          <Route path="/settings" element={<Settings departments={departments} academicYear={academicYear}/>} />
-          <Route path="/settings/departments" element={<Settings departments={departments} academicYear={academicYear}/>} />
-          <Route path="/settings/users" element={<Settings departments={departments} academicYear={academicYear}/>} />
-          <Route path="/settings/academic-year" element={<Settings departments={departments} academicYear={academicYear}/>} />
+          {isAdmin() ? 
+            <Route path="/settings" element={<Settings departments={departments} academicYear={academicYear}/>} /> :
+            undefined
+          }
+          
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Main>
