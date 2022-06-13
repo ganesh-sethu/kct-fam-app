@@ -19,7 +19,11 @@ const apiEndPoints = {
   createAcademicYear:prefixBackEndURI("/api/academic-year"),
   submitProof : prefixBackEndURI("/api/events/proof"),
   deleteProof : prefixBackEndURI("/api/events/proof/delete"),
-  register:prefixBackEndURI("/api/register")
+  register:prefixBackEndURI("/api/register"),
+  addDepartment : prefixBackEndURI("/api/departments/add"),
+  deleteDepartment : prefixBackEndURI("/api/departments/delete"),
+  deleteUser : prefixBackEndURI("/api/users/delete"),
+  addUser : prefixBackEndURI("/api/users/add")
   
 
 };

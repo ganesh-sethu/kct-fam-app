@@ -67,7 +67,10 @@ export default function SignInSide() {
         setLoad(false);
         if (err.response && err.response.status === 401) {
           setAlert("Invalid email or password");
-        } else {
+        } else if (err.response && err.response.status === 204) {
+          setAlert("User not registered !");
+
+        }else {
           setAlert("Couldn't login try later");
         }
       });

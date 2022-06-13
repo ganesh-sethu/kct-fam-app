@@ -48,6 +48,9 @@ export default function BasicTabs({departments,academicYear}) {
     setValue(newValue);
   };
 
+
+  
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -58,7 +61,7 @@ export default function BasicTabs({departments,academicYear}) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Departments departments={departments}/>
+        <Departments departments={departments} setValue={setValue}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Users departments={departments}/>
