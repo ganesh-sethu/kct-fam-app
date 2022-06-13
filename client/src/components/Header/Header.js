@@ -30,6 +30,7 @@ import { Badge, Typography } from "@mui/material";
 import NewEvent from "../NewEvent/NewEvent";
 import Analysis from "../Analysis/Analysis";
 import Budget from "../Budget/Budget";
+import Settings from "../Settings/Settings"
 
 const drawerWidth = 240;
 
@@ -97,9 +98,29 @@ export default function PersistentDrawerLeft() {
   const [departments, setDepartments] = React.useState([]);
   const [department, setDepartment] = React.useState({});
   const [users, setUsers] = React.useState([]);
+  const [academicYear,setAcademicYear] = React.useState("")
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
+
+  const getAcademicYear = (token) => {
+    axios
+      .get(apiEndPoints.getAcademicYear, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        setAcademicYear(res.data.year)
+        console.log(res.data)
+      })
+      .catch((err) => {
+        if(err && err.response && err.response.data && err.response.data.msg){
+          alert(err.response.data.msg)
+        }
+      });
+
+  }
   const getRequests = (token) => {
     axios
       .get(apiEndPoints.getRequests, {
@@ -192,6 +213,7 @@ export default function PersistentDrawerLeft() {
           getEvents(token);
           getDepartments(token);
           getUsers(token);
+          getAcademicYear(token)
         })
         .catch((err) => {
           if (
@@ -399,10 +421,36 @@ export default function PersistentDrawerLeft() {
               "&:hover": {
                 background: theme.palette.primary.light,
               },
+              background:
+                active === "settings"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
             }}
             button
             onClick={() => {
-              setActive("budget");
+              setActive("settings");
+              navigate("/settings");
+            }}
+          >
+            <ListItemText primary="Settings" />
+          </ListItem>
+        </List>
+        <Divider />
+
+        <List>
+          <ListItem
+            sx={{
+              "&:hover": {
+                background: theme.palette.primary.light,
+              },
+              background:
+                active === "profile"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.main,
+            }}
+            button
+            onClick={() => {
+              setActive("profile");
               navigate("/profile");
             }}
           >
@@ -413,6 +461,7 @@ export default function PersistentDrawerLeft() {
               "&:hover": {
                 background: theme.palette.primary.light,
               },
+              
             }}
             button
             onClick={() => navigate("/logout")}
@@ -420,6 +469,7 @@ export default function PersistentDrawerLeft() {
             <ListItemText primary="Logout" />
           </ListItem>
         </List>
+        
       </Drawer>
       <Main open={open} className={classes.toolbar}>
         <Routes>
@@ -465,6 +515,7 @@ export default function PersistentDrawerLeft() {
           />
           <Route path="/analysis" element={<Analysis departments={departments}/>} />
           <Route path="/budget" element={<Budget department={department} />} />
+          <Route path="/settings" element={<Settings departments={departments} academicYear={academicYear}/>} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Main>
