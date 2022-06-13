@@ -21,7 +21,9 @@ const apiEndPoints = {
   deleteProof : prefixBackEndURI("/api/events/proof/delete"),
   register:prefixBackEndURI("/api/register"),
   addDepartment : prefixBackEndURI("/api/departments/add"),
-  deleteDepartment : prefixBackEndURI("/api/departments/delete")
+  deleteDepartment : prefixBackEndURI("/api/departments/delete"),
+  deleteUser : prefixBackEndURI("/api/users/delete"),
+  addUser : prefixBackEndURI("/api/users/add")
   
 
 };
