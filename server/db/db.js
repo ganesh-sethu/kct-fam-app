@@ -9,10 +9,13 @@ const baseConfig = {
 
 const database = process.env.DB_DATABASE
 
+console.log(baseConfig);
+console.log("database",database);
+
 const tempConnection = mysql.createConnection(baseConfig)
 
 tempConnection.query(`CREATE DATABASE IF NOT EXISTS ${database};`)
-
+console.log("tempConnection");
 const connection = mysql.createConnection({
   ...baseConfig,
   database,

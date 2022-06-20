@@ -26,6 +26,9 @@ services:
   client:
     build:
       context: ./client
+    environment:
+      - REACT_APP_BACKEND=http://server:5000
+      
     container_name: fam-app-client
     depends_on:
       - server
