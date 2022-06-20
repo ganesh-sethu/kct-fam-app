@@ -43,7 +43,6 @@ export default function AlertDialog({addModal,setAddModal,departments}) {
     designation:""
 
   })
-  const [department,setDepartment] = React.useState("")
 
   const handleClose = () => {
     setAddModal(false);

@@ -89,7 +89,7 @@ module.exports = {
           const email = result[0].email;
           const html =
             "<h3 color='red'>Your request for even " +
-            eventInfo.eventName +
+            eventInfo[formFields.title] +
             " is approved</h3>" +
             "<p> Approved by : " +
             rejectedUser.name +
@@ -113,16 +113,13 @@ module.exports = {
           const email = result[0].email;
           const html =
             "<h5 color='red'>Sorry! your request for " +
-            eventInfo.eventName +
+            eventInfo[formFields.title] +
             " is rejected</h5>" +
             "<p> Rejected by : " +
             rejectedUser.name +
             "(" +
             rejectedUser.designation +
-            ")</p>" +
-            "<p> Reason for rejection : " +
-            rejectionReason +
-            "</p>";
+            ")</p>"
           sendMail([email], "Request rejected", "", html);
         } else console.log("Request not found");
       }

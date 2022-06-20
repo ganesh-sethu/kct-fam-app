@@ -196,7 +196,9 @@ router.put("/approve", authenticate.auth, (req, res) => {
         error,
       });
     } else if (result && result.affectedRows) {
-      reduceBudget(req.body.requestId);
+      if(nextLevel=== APPROVED){
+        reduceBudget(req.body.requestId);
+      }
       res.send({
         msg: "Request approved",
       });
