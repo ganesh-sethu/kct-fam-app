@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 export default function AcademicYear() {
   const [from,setFrom] = React.useState(null)
   const [to,setTo] = React.useState(null)
-  const [token,setToken] = React.useState(localStorage.getItem("token"))
+  const [token,] = React.useState(localStorage.getItem("token"))
   const [isNull,setIsNull] = React.useState(true)
   const [alert,setAlert] = React.useState(undefined)
   let navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function AcademicYear() {
        setIsNull(false)
        let currAcademicYear = res.data.year
        let fromTo = currAcademicYear.split("-")
-        if(fromTo.length == 2){
+        if(fromTo.length === 2){
           setFrom(fromTo[0])
           setTo(fromTo[1])
         }
@@ -46,6 +46,7 @@ export default function AcademicYear() {
     else{
       navigate("/login")
     }
+    // eslint-disable-next-line
   },[])
 
   const updateAcademicYear = () => {

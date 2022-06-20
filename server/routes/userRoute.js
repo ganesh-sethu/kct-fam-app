@@ -27,8 +27,8 @@ router.get("/", authenticate.auth, (req, res) => {
 
 router.put("/", authenticate.auth, (req, res) => {
   db.query(
-    "update users set name=?,department=?,designation=? where emp_id=?",
-    [req.body.name,req.body.department,req.body.designation,req.body.emp_id],
+    "update users set name=?,department=?,designation=?,email=? where emp_id=?",
+    [req.body.name,req.body.department,req.body.designation,req.body.email,req.body.emp_id],
     (error,result) => {
       if (error) {
           console.log(error);

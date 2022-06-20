@@ -45,8 +45,6 @@ export default function AlertDialog({editModal,setEditModal,user,departments}) {
   })
   const [isUpdated,setIsUpdated] = React.useState(false)
   const navigate = useNavigate();
-  const [department,setDepartment] = React.useState(user.department)
-  const [designation,setDesignation] = React.useState(user.designation)
   const [content,setContent] = React.useState("")
   const handleClose = () => {
     setEditModal(false);
