@@ -7,16 +7,16 @@ const fileUpload = require("express-fileupload")
 require("dotenv").config();
 
 const PORT = process.env.SERVER_PORT;
-const corsOption = {
-  origin: process.env.FRONT_END_DOMAIN,
-};
+// const corsOption = {
+//   origin: process.env.FRONT_END_DOMAIN,
+// };
 
 db.connect();
 
 //midlewares
 app.use(fileUpload())
 app.use(express.json());
-app.use(cors(corsOption));
+app.use(cors());
 
 setTimeout(() => {
   //routes

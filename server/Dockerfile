@@ -3,6 +3,9 @@ FROM node:16
 # Create app directory
 WORKDIR /usr/src/app
 
+RUN apt-get update -y
+RUN apt-get install default-mysql-client -y
+
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
@@ -16,4 +19,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 5000
-CMD [ "node", "index.js" ]
+# CMD [ "node", "index.js" ]
+CMD ["sh", "deploy.sh"]
