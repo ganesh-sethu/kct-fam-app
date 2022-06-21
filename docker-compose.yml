@@ -28,7 +28,7 @@ services:
     restart: always
     #environment:
     #  - REACT_APP_BACKEND=http://server:5000
-      
+    env_file: ./client/production.env
     container_name: fam-app-client
     depends_on:
       - server
